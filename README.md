@@ -3,6 +3,7 @@
 A full-stack web application for interactive 3D visualization of magnetotelluric (MT) and multi-physics geophysical data, including resistivity models, station locations, and earthquake clusters. Built with **React + TypeScript + Three.js** on the frontend and **Node.js + Express** on the backend.
 
 ![App Screenshot Placeholder](https://github.com/melaimmohamedanis/full_stack_3d_mt/blob/master/front_end/public/Screenshot%202026-01-18%20122848.png)  
+
 *Example: Horizontal slice at depth Z with resistivity anomaly and station markers*
 
 ---
@@ -44,7 +45,8 @@ mt_mpdem_plot/
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── Anomaly5.tsx       # Resistivity range visualizer
-│   │   │   ├── VerticalSlice.tsx  # N-S & E-W slice views
+│   │   │   ├── VerticalEastSlice.tsx  # E-W slice views
+├   │   │   │── VerticalNorthSlice.tsx  # N-S slice views
 │   │   │   └── HorizontalSlice.tsx # X-Y depth slice
 │   │   ├── App.tsx
 │   │   └── main.tsx
