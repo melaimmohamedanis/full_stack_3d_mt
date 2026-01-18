@@ -23,7 +23,7 @@ A full-stack web application for interactive 3D visualization of magnetotelluric
   - Earthquake cluster visualization
 - **Ray marching rendering** for smooth volumetric data display
 - **File upload & parsing** for custom geophysical datasets
-- Real-time parameter adjustment via [Leva](https://leva.pmnd.rs/) controls
+
 
 ---
 
