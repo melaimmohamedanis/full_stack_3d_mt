@@ -152,7 +152,8 @@ const SolidAnomaly: React.FC<SolidAnomalyProps> = ({
 
               // --- LOGIC: SLICE MASKING ---
               // Only draw if we are near one of the slice planes
-              bool nearNorth = abs(p.x - uSlicePos.x) < thickness;
+             //the north-south somehow !!!! flipped so we use 1.0 - p.x instead of  p.x 
+              bool nearNorth = abs((1.0 - p.x) - uSlicePos.x) < thickness;
               bool nearEast  = abs(p.y - uSlicePos.y) < thickness;
               bool nearDepth = abs(p.z - uSlicePos.z) < thickness;
 

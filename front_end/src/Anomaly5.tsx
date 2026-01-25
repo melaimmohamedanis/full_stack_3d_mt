@@ -125,7 +125,11 @@ const SolidAnomaly: React.FC<SolidAnomalyProps> = ({
             for(int i = 0; i < MAX_STEPS; i++) {
               if(p.x < 0.0 || p.x > 1.0 || p.y < 0.0 || p.y > 1.0 || p.z < 0.0 || p.z > 1.0 || acc.a >= 0.95) break;
 
-              float val = texture(uTexture, p).r;
+           // Flip the X coordinate (North-South) for the texture lookup
+           //from this
+           //   float val = texture(uTexture, p).r;
+           vec3 samplingPos = vec3(1.0 - p.x, p.y, p.z);
+          float val = texture(uTexture, samplingPos).r;
 
               if (val >= uResMin && val <= uResMax && val < 15.0) {
                 float norm = clamp((val - uMinLog) / (uMaxLog - uMinLog), 0.0, 1.0);

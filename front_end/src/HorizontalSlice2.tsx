@@ -87,7 +87,8 @@ return (
        void main() {
   // Use vUv for X/Y and the uniform uZLevel for the Depth layer
   // Note: Depending on your data orientation, you may need to swap vUv.x/y
-  vec3 samplingPos = vec3(vUv.x, vUv.y, uZLevel);
+     //the north-south somehow  flipped so we use 1.0 - vUv.x instead of  vUv.x
+  vec3 samplingPos = vec3(1.0 - vUv.x, vUv.y, uZLevel);
   
   float val = texture(uTexture, samplingPos).r;
   

@@ -85,7 +85,8 @@ const VerticalEastSlice: React.FC<VerticalEastSliceProps> = ({ volumeData, metad
             // vUv.y  = Depth (Z axis in texture) - Traversed vertically
             
             // Note: Using 1.0 - vUv.y to keep Depth orientation correct (Surface at top)
-            vec3 samplingPos = vec3(vUv.x, uELevel, vUv.y);
+            //the north-south somehow  flipped so we use 1.0 - vUv.x instead of  vUv.x
+            vec3 samplingPos = vec3(1.0 - vUv.x, uELevel, vUv.y);
             
             float val = texture(uTexture, samplingPos).r;
             if (val > 10.0 || val < -5.0) discard;
