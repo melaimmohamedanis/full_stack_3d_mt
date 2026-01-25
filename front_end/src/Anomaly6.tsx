@@ -153,7 +153,8 @@ const SolidAnomaly: React.FC<SolidAnomalyProps> = ({
               // --- LOGIC: SLICE MASKING ---
               // Only draw if we are near one of the slice planes
              //the north-south somehow !!!! flipped so we use 1.0 - p.x instead of  p.x 
-              bool nearNorth = abs((1.0 - p.x) - uSlicePos.x) < thickness;
+             vec3 flippedP = vec3(1.0 - p.x, p.y, p.z);
+              bool nearNorth = abs(flippedP.x - uSlicePos.x) < thickness;
               bool nearEast  = abs(p.y - uSlicePos.y) < thickness;
               bool nearDepth = abs(p.z - uSlicePos.z) < thickness;
 
@@ -167,7 +168,7 @@ const SolidAnomaly: React.FC<SolidAnomalyProps> = ({
 
               // --- LOGIC: VOXEL SNAPPING ---
               // Snap exact position 'p' to grid coordinates to get that blocky 8-bit look
-              vec3 voxelCoord = floor(p * uGridSize) / uGridSize;
+              vec3 voxelCoord = floor(flippedP * uGridSize) / uGridSize;
 
               // Sample texture at voxel center
               float val = texture(uTexture, voxelCoord).r;

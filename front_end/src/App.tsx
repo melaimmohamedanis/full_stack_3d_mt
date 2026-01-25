@@ -5,7 +5,7 @@ import axios from 'axios';
 //use on of those
 //marching ray look like
 //import SolidAnomaly from './Anomaly5';
-//block view look like
+//or this block view look like
 import SolidAnomaly from './Anomaly6';
 
 import HorizontalSlice from './HorizontalSlice2';
