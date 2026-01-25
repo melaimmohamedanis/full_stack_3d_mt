@@ -5,8 +5,9 @@ const { shrinkModel } = require('./shrinkModel');
 const { interpolateModel } = require('./interpolateModel');
 const { parseEarthquakeClusters } = require('../parsers/earthquake_parser');
 const utm = require('utm'); // ← ADD THIS
+const { getEdiMetadata } = require('./resolveTopography');
 
-async function processModel(rhoPath, datPath,earthquake_cluster, bufferKM = 2) {
+async function processModel(rhoPath, datPath,edi_file_path,earthquake_cluster, bufferKM = 2) {
     // 1. Parse model
     const modelData = await parseRhoFile(rhoPath);
     console.log("✅ Model parsed");
@@ -16,6 +17,58 @@ async function processModel(rhoPath, datPath,earthquake_cluster, bufferKM = 2) {
     console.log("stations",stations)
     console.log("center_easting",center_easting)
     console.log("center_northing",center_northing)
+
+
+    let calibrationConstant = 0;
+
+    try {
+        // 1. Attempt to extract metadata
+        const { dataId, elev, ediFileName } = await getEdiMetadata(edi_file_path);
+    
+        // 2. Find matching station (Strict Match)
+        const targetStation = stations.find(s => 
+            (dataId && s.code === dataId) || 
+            s.code === ediFileName
+        );
+    
+        if (!targetStation) {
+            // Instead of throwing, we warn and trigger the catch block logic
+            throw new Error(`No station match found for DATAID "${dataId}" or Filename "${ediFileName}"`);
+        }
+    
+        // 3. Final Calculation if successful
+        calibrationConstant = elev + targetStation.z;
+        console.log(`✅ Station Matched: ${targetStation.code}`);
+        console.log(`📏 Calibration Constant (C): ${calibrationConstant}`);
+    
+    } catch (error) {
+        // Fallback: If file doesn't exist, tags missing, or no match found
+        calibrationConstant = 0;
+        console.warn(`⚠️ Calibration failed: ${error.message}. Using C = 0 as fallback.`);
+    }
+    
+    // 4. Update ALL stations with their absolute elevation
+    // Formula: elev = C - s.z
+    stations.forEach(s => {
+        s.elev = calibrationConstant - s.z;
+    });
+    
+    console.log(`✅ All station elevations updated (Calibration Constant used: ${calibrationConstant})`);
+    
+    // Example check of the first updated station
+    if (stations.length > 0) {
+        console.log(`Station ${stations[0].code}: Z_rel=${stations[0].z}, Absolute_Elev=${stations[0].elev}`);
+    }
+    console.log("stations",stations)
+    
+    
+    
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+    
+
+
+
+
     
     const geoData = { 
         stations, 

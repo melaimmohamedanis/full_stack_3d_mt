@@ -16,6 +16,9 @@ const DEFAULT_RHO_PATH = 'C:/Users/moham/Music/mtest20a/Modular_NLCG_079.rho';
 const DEFAULT_DAT_PATH = 'C:/Users/moham/Music/mtest20a/data.dat';
 const DEFAULT_ERTHQUAKE_FOLDER='C:/Users/moham/Music/mtest20a/BI_Multiplet_clusters'
 const Z_Datuim=1149;
+//extract real elevation
+const edi_file_path='C:/edi/bi_edi/all/bi100.edi'
+
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -38,7 +41,7 @@ app.get('/api/model-data', async (req, res) => {
     }
 
     console.log('🔄 Starting model processing...');
-    const result = await processModel(rhoPath, datPath,earthquake_cluster, 2.0); // bufferKM = 2 km
+    const result = await processModel(rhoPath, datPath,edi_file_path,earthquake_cluster, 2.0); // bufferKM = 2 km
 
     // Convert Float32Array → base64
     const dataBuffer = Buffer.from(result.uniformData.buffer);
