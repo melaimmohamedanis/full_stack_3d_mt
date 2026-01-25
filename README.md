@@ -76,7 +76,7 @@ cd full_stack_3d_mt/backend
 npm install
 
 # Data Preparation
-# Place your .rho, .dat, and .edi files in the /backend/data folder.
+# Add your .rho, .dat, and .edi files path in the /backend/server.js file.
 # Configure your 'z_datum' (the starting depth of your model) in the config.
 
 # Start the processing server
