@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Billboard, Text, Image } from '@react-three/drei';
 import axios from 'axios';
-import SolidAnomaly from './Anomaly5';
+//use on of those
+//marching ray look like
+//import SolidAnomaly from './Anomaly5';
+//block view look like
+import SolidAnomaly from './Anomaly6';
+
 import HorizontalSlice from './HorizontalSlice2';
 import VerticalNorthSlice from './VerticalNorthSlice';
 import VerticalEastSlice from './VerticalEastSlice';
