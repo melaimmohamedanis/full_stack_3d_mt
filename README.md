@@ -56,7 +56,7 @@ mt_mpdem_plot/
 │   └── ...
 │
 └── README.md
-
+```
 
 ## 🚀 Installation & Usage
 
@@ -81,12 +81,13 @@ npm install
 
 # Start the processing server
 npm start
-
+```
 The server will run at http://localhost:5000.
 
 
 
 2. Frontend Setup
+```bash
 The frontend provides the interactive 3D environment using React and Three.js.
 # Navigate to the frontend directory
 cd ../front_end
@@ -99,5 +100,6 @@ npm install
 
 # Start the development server
 npm run dev
+```
 
 Open your browser to http://localhost:5173 to view the platform.
