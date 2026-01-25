@@ -185,7 +185,7 @@ const toggleCluster = (id: string) => {
 
 
   return (
-    <div style={{ width: '100vw', height: '100vh', background: '#222' }}>
+    <div style={{ width: '100vw', height: '100vh', background: '#dad8d8' }}>
 
 {/* 3. Earthquake Clusters */}
 <div style={{ 
