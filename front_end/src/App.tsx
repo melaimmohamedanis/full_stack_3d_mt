@@ -11,6 +11,7 @@ import SolidAnomaly from './Anomaly6';
 import HorizontalSlice from './HorizontalSlice2';
 import VerticalNorthSlice from './VerticalNorthSlice';
 import VerticalEastSlice from './VerticalEastSlice';
+import AxesFrame from './AxesFrame';
 
 
 interface Station {
@@ -18,6 +19,7 @@ interface Station {
   north_km: number; // Changed from plotX
   east_km: number;  // Changed from plotY
   z_km: number;     // Changed from plotZ (usually 0 for surface)
+  elev:number | null;
 }
 
 interface ApiResponse {
@@ -66,6 +68,8 @@ function App() {
   const [sliceDepth, setSliceDepth] = useState(0.5); // 0.5 is middle depth
   const [northSlice, setNorthSlice] = useState(0.5);//middle north
   const [eastSlice, setEastSlice] = useState(0.5); //middle east
+  const [zDatumKM, setZDatumKM] = useState<number>(0);
+
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/model-data')
@@ -118,6 +122,10 @@ function App() {
         });
         setVisibleClusters(initialVisibility);
       }
+
+      if (res.data.z_datuim) {
+        setZDatumKM(res.data.z_datuim / 1000);
+    }
 
 
 
@@ -350,8 +358,14 @@ const toggleCluster = (id: string) => {
 
         {model && (
           <>
+          <AxesFrame 
+      northCoords={model.coordinates_utm.north_utm_km}
+      eastCoords={model.coordinates_utm.east_utm_km}
+      depth={model.spans_km.depth}
+    />
+
             {/* 1. The 3D Volume Model */}
-            <group position={[centerNorth, centerEast, sizeArray[2] / 2]}>
+            <group position={[centerNorth, centerEast, (sizeArray[2] / 2)-zDatumKM]}>
               <SolidAnomaly 
                 volumeData={model.dataBase64} 
                 metadata={{
@@ -377,11 +391,13 @@ const toggleCluster = (id: string) => {
   const x = (st as any).north_km;
   const y = (st as any).east_km;
   const z = (st as any).z_km || 0.05; // 50m offset to stay above the model surface
+  const elev=(st as any).elev ?? z;
+
 
   return (
     <Billboard
       key={`station-${idx}`}
-      position={[x, y, z]} // [East, North, Elevation]
+      position={[x, y, -elev]} // [East, North, Elevation]
     >
       {/* Fallback Marker: A bright red sphere in case the image is missing */}
       <mesh>
@@ -439,7 +455,7 @@ const toggleCluster = (id: string) => {
     centerNorth, 
     centerEast, 
     // This physically moves the plane up and down
-    sliceDepth * sizeArray[2] 
+    sliceDepth * sizeArray[2] -zDatumKM
   ]}>
     <HorizontalSlice 
       volumeData={model.dataBase64}
@@ -459,7 +475,7 @@ const toggleCluster = (id: string) => {
     // Use the derived nMin and actualNorthSpan
     nMin + (northSlice * actualNorthSpan), 
     centerEast, 
-    sizeArray[2] / 2 
+    sizeArray[2] / 2 -zDatumKM
 ]}>
   {model?.dataBase64 && (
     <VerticalNorthSlice 
@@ -481,7 +497,7 @@ const toggleCluster = (id: string) => {
 <group position={[
     centerNorth, 
     modelEastMin + (eastSlice * actualEastSpan), 
-    sizeArray[2] / 2 
+    sizeArray[2] / 2 -zDatumKM
 ]}>
   {model?.dataBase64 && (
     <VerticalEastSlice 
