@@ -70,6 +70,11 @@ function App() {
   const [eastSlice, setEastSlice] = useState(0.5); //middle east
   const [zDatumKM, setZDatumKM] = useState<number>(0);
 
+  const [showHorizontal, setShowHorizontal] = useState(true);
+  const [showNorth, setShowNorth] = useState(true);
+  const [showEast, setShowEast] = useState(true);
+
+
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/model-data')
@@ -241,44 +246,228 @@ const toggleCluster = (id: string) => {
   }}>
     <h4 style={{ margin: '0 0 5px 0', color: '#aaa', fontSize: '12px', textTransform: 'uppercase' }}>Cross-Section Controls</h4>
 
-    {/* East-West Slider */}
-    <div style={{ width: '100%' }}>
-      <label style={{ fontSize: '13px', display: 'block', marginBottom: '5px' }}>
-        East Slice: <span style={{ color: '#00ffff' }}>{(modelEastMin + eastSlice * actualEastSpan).toFixed(2)} km</span>
-      </label>
-      <input 
-        type="range" min="0" max="1" step="0.001" 
-        value={eastSlice} 
-        onChange={(e) => setEastSlice(parseFloat(e.target.value))} 
-        style={{ width: '100%', cursor: 'pointer' }}
-      />
+    
+
+
+{/* East-West Slice Control */}
+<div style={{ width: '100%', marginBottom: '15px' }}>
+  <label style={{ 
+    fontSize: '14px', 
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '8px', 
+    cursor: 'pointer',
+    color: 'white'
+  }}>
+    {/* Visible, styled checkbox */}
+    <div style={{
+      width: '20px',
+      height: '20px',
+      border: showEast ? '2px solid #00ffff' : '2px solid #666',
+      backgroundColor: showEast ? '#00ffff' : 'transparent',
+      borderRadius: '4px',
+      marginRight: '12px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer'
+    }}>
+      {showEast && (
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <path d="M1 6L4 9L11 2" stroke="black" strokeWidth="2" fill="none"/>
+        </svg>
+      )}
     </div>
+
+    <span style={{ flex: 1 }}>
+      East Slice (Y): <span style={{ color: '#00ffff', fontWeight: 'bold' }}>
+        {(modelEastMin + eastSlice * actualEastSpan).toFixed(2)} km
+      </span>
+    </span>
+
+    {/* Hidden native checkbox for accessibility & state */}
+    <input
+      type="checkbox"
+      checked={showEast}
+      onChange={() => setShowEast(!showEast)}
+      style={{
+        position: 'absolute',
+        opacity: 0,
+        pointerEvents: 'none'
+      }}
+      aria-label="Toggle East Slice"
+    />
+  </label>
+
+  {/* Slider */}
+  <input 
+    type="range" 
+    min="0" 
+    max="1" 
+    step="0.001" 
+    value={eastSlice} 
+    disabled={!showEast}
+    onChange={(e) => setEastSlice(parseFloat(e.target.value))} 
+    style={{ 
+      width: '100%', 
+      cursor: showEast ? 'pointer' : 'not-allowed',
+      opacity: showEast ? 1 : 0.3 
+    }}
+  />
+</div>
+
+
+
+
+
+
+
+
+
 
     {/* North-South Slider */}
-    <div style={{ width: '100%' }}>
-      <label style={{ fontSize: '13px', display: 'block', marginBottom: '5px' }}>
-        North Slice: <span style={{ color: '#00ff00' }}>{(modelNorthMin + northSlice * actualNorthSpan).toFixed(2)} km</span>
-      </label>
-      <input 
-        type="range" min="0" max="1" step="0.001" 
-        value={northSlice} 
-        onChange={(e) => setNorthSlice(parseFloat(e.target.value))} 
-        style={{ width: '100%', cursor: 'pointer' }}
-      />
+
+{/* North-South Slice Control */}
+<div style={{ width: '100%', marginBottom: '15px' }}>
+  <label style={{ 
+    fontSize: '14px', 
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '8px', 
+    cursor: 'pointer',
+    color: 'white'
+  }}>
+    {/* Visible, styled checkbox */}
+    <div style={{
+      width: '20px',
+      height: '20px',
+      border: showNorth ? '2px solid #00ff00' : '2px solid #666',
+      backgroundColor: showNorth ? '#00ff00' : 'transparent',
+      borderRadius: '4px',
+      marginRight: '12px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer'
+    }}>
+      {showNorth && (
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <path d="M1 6L4 9L11 2" stroke="black" strokeWidth="2" fill="none"/>
+        </svg>
+      )}
     </div>
 
+    <span style={{ flex: 1 }}>
+      North Slice (X): <span style={{ color: '#00ff00', fontWeight: 'bold' }}>
+        {(modelNorthMin + northSlice * actualNorthSpan).toFixed(2)} km
+      </span>
+    </span>
+
+    {/* Hidden native checkbox for accessibility & state */}
+    <input
+      type="checkbox"
+      checked={showNorth}
+      onChange={() => setShowNorth(!showNorth)}
+      style={{
+        position: 'absolute',
+        opacity: 0,
+        pointerEvents: 'none'
+      }}
+      aria-label="Toggle North Slice"
+    />
+  </label>
+
+  {/* Slider */}
+  <input 
+    type="range" 
+    min="0" 
+    max="1" 
+    step="0.001" 
+    value={northSlice} 
+    disabled={!showNorth}
+    onChange={(e) => setNorthSlice(parseFloat(e.target.value))} 
+    style={{ 
+      width: '100%', 
+      cursor: showNorth ? 'pointer' : 'not-allowed',
+      opacity: showNorth ? 1 : 0.3 
+    }}
+  />
+</div>
+
+
+
     {/* Horizontal/Depth Slider */}
-    <div style={{ width: '100%' }}>
-      <label style={{ fontSize: '13px', display: 'block', marginBottom: '5px' }}>
-        Depth Slice: <span style={{ color: '#ffff00' }}>{(sliceDepth * (model?.spans_km?.depth ?? 0)).toFixed(1)} km</span>
-      </label>
-      <input 
-        type="range" min="0" max="1" step="0.01" 
-        value={sliceDepth} 
-        onChange={(e) => setSliceDepth(parseFloat(e.target.value))} 
-        style={{ width: '100%', cursor: 'pointer' }}
-      />
+   
+
+{/* Horizontal (Depth) Slice Control */}
+<div style={{ width: '100%', marginBottom: '15px' }}>
+  <label style={{ 
+    fontSize: '14px', 
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '8px', 
+    cursor: 'pointer',
+    color: 'white'
+  }}>
+    {/* Visible, styled checkbox */}
+    <div style={{
+      width: '20px',
+      height: '20px',
+      border: showHorizontal ? '2px solid #ffff00' : '2px solid #666',
+      backgroundColor: showHorizontal ? '#ffff00' : 'transparent',
+      borderRadius: '4px',
+      marginRight: '12px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer'
+    }}>
+      {showHorizontal && (
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <path d="M1 6L4 9L11 2" stroke="black" strokeWidth="2" fill="none"/>
+        </svg>
+      )}
     </div>
+
+    <span style={{ flex: 1 }}>
+      Depth Slice (Z): <span style={{ color: '#ffff00', fontWeight: 'bold' }}>
+        {(sliceDepth * (model?.spans_km?.depth ?? 0)).toFixed(1)} km
+      </span>
+    </span>
+
+    {/* Hidden native checkbox for accessibility & state */}
+    <input
+      type="checkbox"
+      checked={showHorizontal}
+      onChange={() => setShowHorizontal(!showHorizontal)}
+      style={{
+        position: 'absolute',
+        opacity: 0,
+        pointerEvents: 'none'
+      }}
+      aria-label="Toggle Depth Slice"
+    />
+  </label>
+
+  {/* Slider */}
+  <input 
+    type="range" 
+    min="0" 
+    max="1" 
+    step="0.01" 
+    value={sliceDepth} 
+    disabled={!showHorizontal}
+    onChange={(e) => setSliceDepth(parseFloat(e.target.value))} 
+    style={{ 
+      width: '100%', 
+      cursor: showHorizontal ? 'pointer' : 'not-allowed',
+      opacity: showHorizontal ? 1 : 0.3 
+    }}
+  />
+</div>
+
+
+
   </div>
 )}
 
@@ -450,7 +639,7 @@ const toggleCluster = (id: string) => {
 
 
 {/* 4. Horizontal Slice */}
-{model?.dataBase64 && (
+{ showHorizontal && model?.dataBase64 && (
   <group position={[
     centerNorth, 
     centerEast, 
@@ -471,14 +660,15 @@ const toggleCluster = (id: string) => {
 )}
 {/*Vertival North South Slice */}
 {/* Vertical North-South Slice */}
+{showNorth && model?.dataBase64 && (
+
 <group position={[
     // Use the derived nMin and actualNorthSpan
     nMin + (northSlice * actualNorthSpan), 
     centerEast, 
     sizeArray[2] / 2 -zDatumKM
 ]}>
-  {model?.dataBase64 && (
-    <VerticalNorthSlice 
+      <VerticalNorthSlice 
       volumeData={model.dataBase64}
       metadata={{
         nx: model.dimensions.n_north,
@@ -488,18 +678,19 @@ const toggleCluster = (id: string) => {
       }}
       nSlice={northSlice}
     />
-  )}
+ 
 </group>
+ )}
 
 {/*Vertical East-Weast Slice */}
 
-
+{ showEast && model?.dataBase64 && (
 <group position={[
     centerNorth, 
     modelEastMin + (eastSlice * actualEastSpan), 
     sizeArray[2] / 2 -zDatumKM
 ]}>
-  {model?.dataBase64 && (
+ 
     <VerticalEastSlice 
       volumeData={model.dataBase64}
       metadata={{
@@ -510,9 +701,10 @@ const toggleCluster = (id: string) => {
       }}
       eSlice={eastSlice}
     />
-  )}
-</group>
+  
 
+</group>
+)}
       
       </Canvas>
     </div>
