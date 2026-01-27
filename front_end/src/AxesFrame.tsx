@@ -15,7 +15,7 @@ const AxesMesh: React.FC<AxesMeshProps> = ({ northCoords, eastCoords, depth }) =
 
   const gridColor = "#444444";
   const textColor = "#000000";
-  const labelSize = 0.7;
+  const labelSize = 0.9;
 
   // Define grid intervals (e.g., every 5km)
   const step = 5;
@@ -43,12 +43,12 @@ const AxesMesh: React.FC<AxesMeshProps> = ({ northCoords, eastCoords, depth }) =
       {nGrid.map((x) => (
         <group key={`nx-${x}`}>
           {/* Line across the bottom face */}
-          <Line points={[[x, minE, depth], [x, maxE, depth]]} color={gridColor} lineWidth={0.5} transparent opacity={0.3} />
+          <Line points={[[x, minE, depth], [x, maxE, depth]]} color={gridColor} lineWidth={0.5} transparent opacity={0.2} />
           {/* Line up the side walls */}
           <Line points={[[x, minE, 0], [x, minE, depth]]} color={gridColor} lineWidth={0.5} />
           <Line points={[[x, maxE, 0], [x, maxE, depth]]} color={gridColor} lineWidth={0.5} />
           {/* Label at the top */}
-          <Text position={[x, minE - 1, 0]} fontSize={labelSize} color={textColor} rotation={[-Math.PI / 2, 0, 0]}>
+          <Text position={[x, minE - 1, 0]} fontSize={labelSize} color={textColor} rotation={[-Math.PI / 2, -Math.PI / 2, 0]}>
             {x.toFixed(1)}
           </Text>
         </group>
@@ -63,7 +63,7 @@ const AxesMesh: React.FC<AxesMeshProps> = ({ northCoords, eastCoords, depth }) =
           <Line points={[[minN, y, 0], [minN, y, depth]]} color={gridColor} lineWidth={0.5} />
           <Line points={[[maxN, y, 0], [maxN, y, depth]]} color={gridColor} lineWidth={0.5} />
           {/* Label at the top */}
-          <Text position={[minN - 2, y, 0]} fontSize={labelSize} color={textColor} rotation={[-Math.PI / 2, 0, Math.PI / 2]}>
+          <Text position={[minN - 2, y, 0]} fontSize={labelSize} color={textColor} rotation={[-Math.PI / 2,-Math.PI / 2, 0]}>
             {y.toFixed(1)}
           </Text>
         </group>
@@ -81,15 +81,15 @@ const AxesMesh: React.FC<AxesMeshProps> = ({ northCoords, eastCoords, depth }) =
             opacity={z === 0 || z === depth ? 1 : 0.2} // Brighten top and bottom
           />
           {/* Depth Label */}
-          <Text position={[minN - 1, minE - 1, z]} fontSize={labelSize} color={textColor}>
+          <Text position={[minN - 1, minE - 1, z]} fontSize={labelSize} color={textColor} rotation={[-Math.PI / 2,-Math.PI / 2,0]}>
             {z}
           </Text>
         </group>
       ))}
 
       {/* AXIS TITLES */}
-      <Text position={[(minN + maxN) / 2, minE - 5, 0]} fontSize={1.2} color="yellow">North UTM (km)</Text>
-      <Text position={[minN - 5, (minE + maxE) / 2, 0]} fontSize={1.2} color="yellow" rotation={[0, 0, Math.PI / 2]}>East UTM (km)</Text>
+      <Text position={[(minN + maxN) / 2, minE - 7, 0]} fontSize={1.2} color="black" rotation={[0, -Math.PI / 2, Math.PI / 2]}>North UTM (km)</Text>
+      <Text position={[minN - 5, (minE + maxE) / 2, 0]} fontSize={1.2} color="black" rotation={[0, -Math.PI / 2, Math.PI / 2]}>East UTM (km)</Text>
     </group>
   );
 };

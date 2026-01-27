@@ -189,6 +189,34 @@ const toggleCluster = (id: string) => {
 
 
 
+////////////////////////////
+const takeScreenshot = () => {
+  // Give Three.js time to finish rendering the current frame
+  setTimeout(() => {
+    const canvas = document.querySelector('canvas');
+    if (!canvas) return;
+
+    const link = document.createElement('a');
+    link.download = 'mt_model_screenshot.png';
+    
+    // Force a high-quality capture
+    canvas.toBlob((blob) => {
+      if (blob) {
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        URL.revokeObjectURL(link.href);
+      }
+    }, 'image/png', 1.0);
+  }, 100); // Wait 100ms for render to complete
+};
+
+
+
+//////////////////////////
+
+
+
+
   return (
     <div style={{ width: '100vw', height: '100vh', background: '#dad8d8' }}>
 
@@ -468,6 +496,30 @@ const toggleCluster = (id: string) => {
 
 
 
+
+
+
+<button
+  onClick={takeScreenshot}
+  style={{
+    background: '#444',
+    color: 'white',
+    border: '1px solid #666',
+    padding: '8px 12px',
+    borderRadius: '6px',
+    fontSize: '13px',
+    cursor: 'pointer',
+    marginTop: '10px',
+    width: '100%'
+  }}
+>
+  📸 Download High-Quality Screenshot
+</button>
+
+
+
+
+
   </div>
 )}
 
@@ -534,6 +586,7 @@ const toggleCluster = (id: string) => {
 
 
      <Canvas 
+      gl={{ preserveDrawingBuffer: true, antialias: true }}
   camera={{ position: [centerNorth+ 30 , centerEast+ 30 ,  30], fov: 45, up: [0, 0, -1] }}
 >
         <ambientLight intensity={0.2} />
